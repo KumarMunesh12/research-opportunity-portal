@@ -1,0 +1,33 @@
+$kind: http-request
+description: "Expected: 201 Created"
+url: "{{baseUrl}}/api/opportunities"
+method: POST
+headers:
+  Content-Type: application/json
+body:
+  type: json
+  content: |-
+    {
+      "research_title": "IoT-Based Smart Irrigation",
+      "research_description": "Design a low-cost soil moisture sensor network that automates irrigation for small farms.",
+      "research_area": "Internet of Things",
+      "faculty_name": "Dr. Bilal Hussain",
+      "department": "Electrical Engineering",
+      "required_skills": "Arduino, Embedded C, MQTT",
+      "available_positions": 3,
+      "application_deadline": "2026-11-20",
+      "status": "Open"
+    }
+scripts:
+  - type: afterResponse
+    code: |-
+      pm.test("Status code is 201", function () {
+          pm.response.to.have.status(201);
+      });
+      pm.test("Saved new ID as opportunityId2", function () {
+          var json = pm.response.json();
+          pm.expect(json.data.id).to.be.a("number");
+          pm.collectionVariables.set("opportunityId2", json.data.id);
+      });
+    language: text/javascript
+order: 2000

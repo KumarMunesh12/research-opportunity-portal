@@ -1,0 +1,23 @@
+$kind: http-request
+description: "Expected: 200 OK, status = Closed"
+url: "{{baseUrl}}/api/opportunities/{{opportunityId2}}"
+method: PUT
+headers:
+  Content-Type: application/json
+body:
+  type: json
+  content: |-
+    {
+      "status": "Closed"
+    }
+scripts:
+  - type: afterResponse
+    code: |-
+      pm.test("Status code is 200", function () {
+          pm.response.to.have.status(200);
+      });
+      pm.test("Status is now Closed", function () {
+          pm.expect(pm.response.json().data.status).to.eql("Closed");
+      });
+    language: text/javascript
+order: 7000

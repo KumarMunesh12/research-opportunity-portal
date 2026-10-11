@@ -1,0 +1,33 @@
+$kind: http-request
+description: "Expected: 200 OK"
+url: "{{baseUrl}}/api/opportunities/{{opportunityId1}}"
+method: PUT
+headers:
+  Content-Type: application/json
+body:
+  type: json
+  content: |-
+    {
+      "research_title": "Congestion Control in 5G and Wi-Fi 7 Networks",
+      "research_description": "Compare TCP congestion control algorithms (Cubic, BBR) over simulated 5G links using ns-3.",
+      "research_area": "Computer Networks",
+      "faculty_name": "Dr. Sana Ahmed",
+      "department": "Computer Science",
+      "required_skills": "C++, ns-3, TCP/IP, Python",
+      "available_positions": 4,
+      "application_deadline": "2026-12-20",
+      "status": "Open"
+    }
+scripts:
+  - type: afterResponse
+    code: |-
+      pm.test("Status code is 200", function () {
+          pm.response.to.have.status(200);
+      });
+      pm.test("Fields were updated", function () {
+          var d = pm.response.json().data;
+          pm.expect(d.available_positions).to.eql(4);
+          pm.expect(d.application_deadline).to.eql("2026-12-20");
+      });
+    language: text/javascript
+order: 6000

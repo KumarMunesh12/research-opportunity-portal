@@ -1,0 +1,12 @@
+$kind: http-request
+description: "Expected: 200 OK"
+url: "{{baseUrl}}/api/opportunities/{{opportunityId3}}"
+method: DELETE
+scripts:
+  - type: afterResponse
+    code: |-
+      pm.test("Status code is 200", function () {
+          pm.response.to.have.status(200);
+      });
+    language: text/javascript
+order: 8000

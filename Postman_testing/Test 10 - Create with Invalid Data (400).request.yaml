@@ -1,0 +1,27 @@
+$kind: http-request
+description: "Expected: 400 Bad Request"
+url: "{{baseUrl}}/api/opportunities"
+method: POST
+headers:
+  Content-Type: application/json
+body:
+  type: json
+  content: |-
+    {
+      "research_title": "",
+      "research_description": "Missing several required fields",
+      "available_positions": -2,
+      "application_deadline": "not-a-date",
+      "status": "Pending"
+    }
+scripts:
+  - type: afterResponse
+    code: |-
+      pm.test("Status code is 400", function () {
+          pm.response.to.have.status(400);
+      });
+      pm.test("Validation details are returned", function () {
+          pm.expect(pm.response.json().details).to.be.an("array").that.is.not.empty;
+      });
+    language: text/javascript
+order: 10000
